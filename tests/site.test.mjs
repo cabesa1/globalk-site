@@ -20,7 +20,7 @@ test('Todas as páginas possuem estrutura semântica, SEO e contato acessível',
     assert.equal(document.querySelectorAll('main').length, 1, path);
     assert.ok(document.querySelector('meta[name="viewport"]')?.content.includes('width=device-width'), path);
     assert.ok(document.querySelector('meta[name="description"]')?.content.length > 50, path);
-    assert.equal(document.querySelector('link[rel="canonical"]').href, `https://globalk.com.br${path}`);
+    assert.equal(document.querySelector('link[rel="canonical"]').href, `https://globalk-site.vercel.app${path}`);
     const equivalent = path.startsWith('/en/') ? path.slice(3) : `/en${path}`;
     assert.ok(document.querySelector(`.language-switcher a[href="${equivalent}"]`), `Language switch: ${path}`);
     assert.equal(document.querySelectorAll('link[rel="alternate"][hreflang]').length, 3, path);
@@ -40,8 +40,8 @@ test('Links e âncoras locais resolvem corretamente, inclusive entre páginas', 
     for (const anchor of document.querySelectorAll('a[href]')) {
       const href = anchor.getAttribute('href');
       assert.ok(href && href !== '#', `Link sem destino: ${path}`);
-      const url = new URL(href, `https://globalk.com.br${path}`);
-      if (url.origin !== 'https://globalk.com.br') continue;
+      const url = new URL(href, `https://globalk-site.vercel.app${path}`);
+      if (url.origin !== 'https://globalk-site.vercel.app') continue;
       const target = docs.get(url.pathname);
       assert.ok(target, `Página inexistente: ${href} em ${path}`);
       if (url.hash) assert.ok(target.getElementById(decodeURIComponent(url.hash.slice(1))), `Âncora inexistente: ${href} em ${path}`);
@@ -90,7 +90,7 @@ test('JavaScript inicializa sem bibliotecas externas e atualiza o assunto do con
   for (const path of paths) {
     const { document, window } = parseHTML(await readFile(resolve(root, `.${path}/index.html`), 'utf8'));
     window.matchMedia = () => ({ matches: true, addEventListener() {} });
-    const context = { document, window, location: new URL(`https://globalk.com.br${path}`), URL, encodeURIComponent, requestAnimationFrame: fn => fn() };
+    const context = { document, window, location: new URL(`https://globalk-site.vercel.app${path}`), URL, encodeURIComponent, requestAnimationFrame: fn => fn() };
     vm.runInNewContext(code, context);
     const select = document.querySelector('#contact-topic');
     Object.defineProperty(select, 'value', { configurable: true, value: 'Multi-K' });
@@ -105,7 +105,7 @@ test('JavaScript inicializa sem bibliotecas externas e atualiza o assunto do con
 
 test('Sitemap contém todas as páginas e não inclui páginas de template', async () => {
   const sitemap = await readFile(resolve(root, 'sitemap.xml'), 'utf8');
-  for (const path of paths) assert.ok(sitemap.includes(`<loc>https://globalk.com.br${path}</loc>`));
+  for (const path of paths) assert.ok(sitemap.includes(`<loc>https://globalk-site.vercel.app${path}</loc>`));
   assert.equal((sitemap.match(/<loc>/g) || []).length, 14);
   assert.ok(!sitemap.includes('wpr_templates'));
 });

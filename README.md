@@ -75,9 +75,9 @@ Revisão recomendada: 360, 390, 768, 1024 e 1440 px; navegação de teclado; zoo
 
 ## Publicação
 
-O diretório `dist` pode ser hospedado em um servidor estático. `vercel.json` configura o build e as URLs com barra final. Este projeto **não foi publicado** e o domínio existente não foi alterado.
+O diretório `dist` pode ser hospedado em um servidor estático. `vercel.json` configura o build e as URLs com barra final. O projeto está publicado em [globalk-site.vercel.app](https://globalk-site.vercel.app/); o domínio `globalk.com.br` não foi alterado.
 
-URLs canônicas, sitemap e Open Graph usam `https://globalk.com.br`. Em uma publicação final com outro domínio, ajuste esses valores em `src/components.mjs` e `scripts/build.mjs` antes do build. Use a configuração de proteção/noindex da plataforma para previews públicos.
+URLs canônicas, sitemap e Open Graph usam `https://globalk-site.vercel.app`. Em uma publicação final com outro domínio, ajuste esses valores em `src/components.mjs` e `scripts/build.mjs` antes do build. Use a configuração de proteção/noindex da plataforma para previews públicos.
 
 ## Fontes e materiais
 
