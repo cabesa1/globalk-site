@@ -1,0 +1,137 @@
+{
+  "source": "https://globalk.com.br/",
+  "assets": [
+    {
+      "name": "logo",
+      "source": "https://globalk.com.br/wp-content/uploads/2025/11/LogoGlobalK.png"
+    },
+    {
+      "name": "economize",
+      "source": "https://globalk.com.br/wp-content/uploads/2025/11/economize-2-1024x683.webp"
+    },
+    {
+      "name": "multik",
+      "source": "https://globalk.com.br/wp-content/uploads/2025/11/multik1.png"
+    },
+    {
+      "name": "multik-detail",
+      "source": "https://globalk.com.br/wp-content/uploads/2025/11/multik2.png"
+    },
+    {
+      "name": "safek",
+      "source": "https://globalk.com.br/wp-content/uploads/2025/11/WhatsApp-Image-2025-11-19-at-13.41.49-819x1024.jpeg"
+    },
+    {
+      "name": "tradek",
+      "source": "https://globalk.com.br/wp-content/uploads/2025/11/Image_fx-1.png"
+    },
+    {
+      "name": "brand-economize",
+      "source": "https://globalk.com.br/wp-content/uploads/2025/10/economize.png"
+    },
+    {
+      "name": "brand-multik",
+      "source": "https://globalk.com.br/wp-content/uploads/2025/10/multik-1.png"
+    },
+    {
+      "name": "brand-safek",
+      "source": "https://globalk.com.br/wp-content/uploads/2025/10/safek-1.png"
+    },
+    {
+      "name": "brand-tradek",
+      "source": "https://globalk.com.br/wp-content/uploads/2025/11/tradek.png"
+    }
+  ],
+  "outputs": [
+    {
+      "name": "logo",
+      "bytes": 8316,
+      "width": 500,
+      "height": 193
+    },
+    {
+      "name": "economize-480",
+      "bytes": 24050,
+      "width": 480,
+      "height": 320
+    },
+    {
+      "name": "economize-960",
+      "bytes": 51358,
+      "width": 960,
+      "height": 640
+    },
+    {
+      "name": "multik-480",
+      "bytes": 38492,
+      "width": 480,
+      "height": 600
+    },
+    {
+      "name": "multik-960",
+      "bytes": 118742,
+      "width": 960,
+      "height": 1200
+    },
+    {
+      "name": "multik-detail-480",
+      "bytes": 20206,
+      "width": 480,
+      "height": 383
+    },
+    {
+      "name": "multik-detail-960",
+      "bytes": 48584,
+      "width": 960,
+      "height": 767
+    },
+    {
+      "name": "safek-480",
+      "bytes": 8856,
+      "width": 480,
+      "height": 600
+    },
+    {
+      "name": "safek-960",
+      "bytes": 20396,
+      "width": 819,
+      "height": 1024
+    },
+    {
+      "name": "tradek-480",
+      "bytes": 26944,
+      "width": 480,
+      "height": 480
+    },
+    {
+      "name": "tradek-960",
+      "bytes": 78656,
+      "width": 960,
+      "height": 960
+    },
+    {
+      "name": "brand-economize",
+      "bytes": 2726,
+      "width": 398,
+      "height": 60
+    },
+    {
+      "name": "brand-multik",
+      "bytes": 3296,
+      "width": 398,
+      "height": 71
+    },
+    {
+      "name": "brand-safek",
+      "bytes": 1926,
+      "width": 398,
+      "height": 77
+    },
+    {
+      "name": "brand-tradek",
+      "bytes": 1634,
+      "width": 401,
+      "height": 60
+    }
+  ]
+}

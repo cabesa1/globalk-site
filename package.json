@@ -1,0 +1,17 @@
+{
+  "name": "globalk-institucional",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Site institucional mobile first do grupo GlobalK.",
+  "scripts": {
+    "dev": "node scripts/serve.mjs",
+    "build": "node scripts/build.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "check": "npm run build && npm test"
+  },
+  "devDependencies": {
+    "linkedom": "^0.18.12",
+    "sharp": "^0.34.3"
+  }
+}

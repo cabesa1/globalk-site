@@ -1,0 +1,89 @@
+# GlobalK
+
+Site institucional mobile first, em português e inglês, com 14 páginas estáticas. O seletor PT | EN no cabeçalho mantém o visitante na página equivalente. Direção editorial em preto e vermelho, tipografia Playfair + Satoshi e materiais de marca provenientes do site original.
+
+## Executar localmente
+
+Requer Node.js 22 ou superior.
+
+```sh
+npm install
+npm run build
+npm run dev
+```
+
+Abra **http://localhost:5173**. No PowerShell, use `npm.cmd` se a política de execução bloquear `npm.ps1`.
+
+O servidor lê `dist`. Após alterar conteúdo, CSS ou JavaScript, rode `npm run build` e atualize o navegador. Para usar outra porta, defina a variável `PORT` antes de iniciar o servidor.
+
+## Páginas
+
+| URL | Conteúdo |
+| --- | --- |
+| `/` | Grupo, unidades de negócio, resumo da trajetória e contato |
+| `/globalk/` | Entrada e operação no mercado brasileiro |
+| `/economize/` | Open Box e operação comercial |
+| `/multik/` | Organização e utilidades |
+| `/safek/` | Ambientes livres de celulares |
+| `/tradek/` | Importação e financiamento |
+| `/our-history/` | Trajetória do grupo |
+
+As sete versões em inglês usam o prefixo `/en/` (por exemplo, `/en/tradek/` e `/en/our-history/`).
+
+## Estrutura
+
+- `src/content.mjs`: textos e informações das unidades e da história.
+- `src/english.mjs`: traduções das unidades e da história.
+- `src/components.mjs`: cabeçalho, menu, contatos, rodapé, imagens e estrutura das páginas.
+- `scripts/build.mjs`: geração do HTML, sitemap, robots, página 404 e imagem de compartilhamento.
+- `public/styles.css`: estilos, começando pelo layout de celular e expandindo em 600, 960 e 1400 px.
+- `public/app.js`: menu acessível, animações progressivas e assunto do contato.
+- `public/assets/`: imagens WebP otimizadas e fontes locais.
+- `public/assets/sources.json`: procedência dos materiais visuais do site original.
+- `scripts/prepare-assets.mjs`: atualização opcional dos materiais a partir das fontes públicas. Não é necessário para o build normal.
+- `scripts/serve.mjs`: servidor local de arquivos estáticos.
+- `tests/site.test.mjs`: verificações automatizadas de integridade e comportamento de contato.
+- `dist/`: resultado pronto para hospedagem estática; ignorado pelo Git.
+
+## Decisões de implementação
+
+- HTML completo por página: o conteúdo principal funciona sem JavaScript.
+- Sem dependências de JavaScript em produção, vídeo automático, analytics ou fontes remotas.
+- Menu com `dialog`, Escape, contenção de foco e retorno ao controle de abertura.
+- Navegação alternativa sem JavaScript.
+- Animações discretas respeitam a preferência por movimento reduzido.
+- Imagens responsivas em duas larguras, dimensões explícitas e carregamento adiado fora do hero.
+- Contatos reais por `mailto:` e `tel:`. A seleção da unidade preenche o assunto do e-mail.
+- **Não há backend de formulário nem promessa de entrega de mensagens.** O link abre o aplicativo de e-mail do visitante, que controla o envio.
+- O link externo não validado da Multi-K foi excluído. A Trade-K mantém o contato dentro do site institucional.
+- Não foram reutilizados contadores sem confirmação atual, meta de liderança em 2026, logos de criptomoedas ou conteúdo copiado entre unidades.
+- A cronologia usa como fonte a página institucional original; não constitui verificação independente dos marcos comerciais.
+
+## Verificações
+
+```sh
+npm run check
+```
+
+Os testes verificam as 14 páginas, troca PT/EN, destinos locais, âncoras, IDs, semântica, SEO básico, recursos, limites de peso, correções editoriais e a atualização do assunto do e-mail em um DOM de teste.
+
+Na entrega inicial, as sete rotas em português e os principais recursos foram testados por HTTP no servidor local, incluindo a resposta 404. As rotas em inglês passaram nos testes de build e integridade do DOM.
+
+**Limite de validação:** não havia navegador conectado à sessão. A inspeção visual renderizada, o comportamento real do menu por teclado e os testes de toque em dispositivos permanecem pendentes. Os testes de DOM não substituem essa revisão. O envio/recebimento de e-mail não foi testado.
+
+Revisão recomendada: 360, 390, 768, 1024 e 1440 px; navegação de teclado; zoom de 200%; movimento reduzido; JavaScript desativado; e-mail/telefone em dispositivo real.
+
+## Publicação
+
+O diretório `dist` pode ser hospedado em um servidor estático. `vercel.json` configura o build e as URLs com barra final. Este projeto **não foi publicado** e o domínio existente não foi alterado.
+
+URLs canônicas, sitemap e Open Graph usam `https://globalk.com.br`. Em uma publicação final com outro domínio, ajuste esses valores em `src/components.mjs` e `scripts/build.mjs` antes do build. Use a configuração de proteção/noindex da plataforma para previews públicos.
+
+## Fontes e materiais
+
+- Informações e imagens: [GlobalK](https://globalk.com.br/), com URLs individuais em `public/assets/sources.json`.
+- Satoshi: [Fontshare](https://www.fontshare.com/fonts/satoshi).
+- Playfair Display: [Google Fonts](https://fonts.google.com/specimen/Playfair+Display), arquivos distribuídos pelo Fontsource.
+- O globo editorial e o favicon são SVGs locais. Não são mapas de precisão nem uma reformulação do logotipo oficial.
+
+Os materiais e as informações comerciais devem ser aprovados pelo responsável pela marca antes da publicação.
