@@ -5,6 +5,7 @@ import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parseHTML } from 'linkedom';
 import vm from 'node:vm';
+import { SITE_URL } from '../src/seo.mjs';
 
 const root = fileURLToPath(new URL('../dist/', import.meta.url));
 const ptPaths = ['/', '/globalk/', '/economize/', '/multik/', '/safek/', '/tradek/', '/our-history/'];
@@ -12,7 +13,7 @@ const paths = [...ptPaths, ...ptPaths.map(path => `/en${path}`), ...ptPaths.map(
 const docs = new Map();
 for (const path of paths) docs.set(path, parseHTML(await readFile(resolve(root, `.${path}/index.html`), 'utf8')).document);
 
-test('Todas as páginas possuem estrutura semântica, SEO e contato acessível', () => {
+test('Todas as páginas possuem estrutura semântica, SEO e contato acessível', async () => {
   const titles = new Set();
   for (const [path, document] of docs) {
     assert.equal(document.documentElement.lang, path.startsWith('/en/') ? 'en' : path.startsWith('/es/') ? 'es' : 'pt-BR', path);
@@ -20,12 +21,25 @@ test('Todas as páginas possuem estrutura semântica, SEO e contato acessível',
     assert.equal(document.querySelectorAll('main').length, 1, path);
     assert.ok(document.querySelector('meta[name="viewport"]')?.content.includes('width=device-width'), path);
     assert.ok(document.querySelector('meta[name="description"]')?.content.length > 50, path);
-    assert.equal(document.querySelector('link[rel="canonical"]').href, `https://globalk-site.vercel.app${path}`);
+    assert.equal(document.querySelector('link[rel="canonical"]').href, `${SITE_URL}${path}`);
+    assert.equal(document.querySelector('meta[name="robots"]').content, 'index,follow,max-image-preview:large', path);
+    assert.equal(document.querySelector('meta[property="og:url"]').content, `${SITE_URL}${path}`, path);
+    const socialImage = document.querySelector('meta[property="og:image"]').content;
+    assert.equal(socialImage, `${SITE_URL}/assets/social-card-${path.startsWith('/en/') ? 'en' : path.startsWith('/es/') ? 'es' : 'pt'}.png`, path);
+    assert.ok((await stat(resolve(root, `.${new URL(socialImage).pathname}`))).isFile(), path);
     const basePath = path.replace(/^\/(en|es)(?=\/)/, '');
     for (const equivalent of [basePath, `/en${basePath}`, `/es${basePath}`]) {
       assert.ok(document.querySelector(`.language-switcher a[href="${equivalent}"]`), `Language switch: ${path} -> ${equivalent}`);
     }
     assert.equal(document.querySelectorAll('link[rel="alternate"][hreflang]').length, 4, path);
+    const graph = JSON.parse(document.querySelector('script[type="application/ld+json"]').textContent)['@graph'];
+    assert.equal(graph[0].url, `${SITE_URL}${path}`, path);
+    assert.equal(graph[0].inLanguage, path.startsWith('/en/') ? 'en' : path.startsWith('/es/') ? 'es' : 'pt-BR', path);
+    if (['/', '/en/', '/es/'].includes(path)) {
+      assert.ok(graph.some(node => node['@type'] === 'Organization' && node.taxID === '18.228.061/0001-76'), path);
+    } else {
+      assert.ok(graph.some(node => node['@type'] === 'BreadcrumbList' && node.itemListElement[1].item === `${SITE_URL}${path}`), path);
+    }
     assert.ok(document.querySelector('a[href^="mailto:"]'), path);
     assert.ok(document.querySelector('a[href="tel:+551132305636"]'), path);
     assert.ok(document.querySelector('label[for="contact-topic"]'), path);
@@ -42,8 +56,8 @@ test('Links e âncoras locais resolvem corretamente, inclusive entre páginas', 
     for (const anchor of document.querySelectorAll('a[href]')) {
       const href = anchor.getAttribute('href');
       assert.ok(href && href !== '#', `Link sem destino: ${path}`);
-      const url = new URL(href, `https://globalk-site.vercel.app${path}`);
-      if (url.origin !== 'https://globalk-site.vercel.app') continue;
+      const url = new URL(href, `${SITE_URL}${path}`);
+      if (url.origin !== SITE_URL) continue;
       const target = docs.get(url.pathname);
       assert.ok(target, `Página inexistente: ${href} em ${path}`);
       if (url.hash) assert.ok(target.getElementById(decodeURIComponent(url.hash.slice(1))), `Âncora inexistente: ${href} em ${path}`);
@@ -92,7 +106,7 @@ test('JavaScript inicializa sem bibliotecas externas e atualiza o assunto do con
   for (const path of paths) {
     const { document, window } = parseHTML(await readFile(resolve(root, `.${path}/index.html`), 'utf8'));
     window.matchMedia = () => ({ matches: true, addEventListener() {} });
-    const context = { document, window, location: new URL(`https://globalk-site.vercel.app${path}`), URL, encodeURIComponent, requestAnimationFrame: fn => fn() };
+    const context = { document, window, location: new URL(`${SITE_URL}${path}`), URL, encodeURIComponent, requestAnimationFrame: fn => fn() };
     vm.runInNewContext(code, context);
     const select = document.querySelector('#contact-topic');
     Object.defineProperty(select, 'value', { configurable: true, value: 'Multi-K' });
@@ -107,7 +121,23 @@ test('JavaScript inicializa sem bibliotecas externas e atualiza o assunto do con
 
 test('Sitemap contém todas as páginas e não inclui páginas de template', async () => {
   const sitemap = await readFile(resolve(root, 'sitemap.xml'), 'utf8');
-  for (const path of paths) assert.ok(sitemap.includes(`<loc>https://globalk-site.vercel.app${path}</loc>`));
+  for (const path of paths) {
+    const base = path.replace(/^\/(en|es)(?=\/)/, '');
+    const marker = `<url><loc>${SITE_URL}${path}</loc>`;
+    const start = sitemap.indexOf(marker);
+    const entry = start < 0 ? '' : sitemap.slice(start + marker.length, sitemap.indexOf('</url>', start));
+    assert.ok(entry, path);
+    for (const [lang, target] of [['pt-BR', base], ['en', `/en${base}`], ['es', `/es${base}`], ['x-default', base]]) {
+      assert.ok(entry.includes(`hreflang="${lang}" href="${SITE_URL}${target}"`), `${path}: ${lang}`);
+    }
+  }
   assert.equal((sitemap.match(/<loc>/g) || []).length, 21);
+  assert.equal((sitemap.match(/<xhtml:link /g) || []).length, 84);
   assert.ok(!sitemap.includes('wpr_templates'));
+  assert.ok(!sitemap.includes('<lastmod>'), 'Do not invent update dates');
+  const robots = await readFile(resolve(root, 'robots.txt'), 'utf8');
+  assert.equal(robots, `User-agent: *\nAllow: /\n\nSitemap: ${SITE_URL}/sitemap.xml\n`);
+  const notFound = parseHTML(await readFile(resolve(root, '404.html'), 'utf8')).document;
+  assert.equal(notFound.querySelector('meta[name="robots"]').content, 'noindex,follow');
+  assert.ok(!notFound.querySelector('link[rel="canonical"], script[type="application/ld+json"]'));
 });

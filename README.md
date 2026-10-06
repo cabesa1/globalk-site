@@ -35,6 +35,7 @@ As sete versões em inglês usam o prefixo `/en/`; as sete em espanhol usam `/es
 - `src/content.mjs`: textos e informações das unidades e da história.
 - `src/english.mjs`: traduções das unidades e da história.
 - `src/spanish.mjs`: traduções em espanhol das unidades e da história.
+- `src/seo.mjs`: domínio canônico, hreflang, sitemap, robots e dados estruturados.
 - `src/components.mjs`: cabeçalho, menu, contatos, rodapé, imagens e estrutura das páginas.
 - `scripts/build.mjs`: geração do HTML, sitemap, robots, página 404 e imagem de compartilhamento.
 - `public/styles.css`: estilos, começando pelo layout de celular e expandindo em 600, 960 e 1400 px.
@@ -79,7 +80,7 @@ Revisão recomendada: 360, 390, 768, 1024 e 1440 px; navegação de teclado; zoo
 
 O diretório `dist` pode ser hospedado em um servidor estático. `vercel.json` configura o build e as URLs com barra final. O projeto está publicado em [globalk-site.vercel.app](https://globalk-site.vercel.app/); o domínio `globalk.com.br` não foi alterado.
 
-URLs canônicas, sitemap e Open Graph usam `https://globalk-site.vercel.app`. Em uma publicação final com outro domínio, ajuste esses valores em `src/components.mjs` e `scripts/build.mjs` antes do build. Use a configuração de proteção/noindex da plataforma para previews públicos.
+URLs canônicas, sitemap e Open Graph usam `https://globalk-site.vercel.app` por padrão. Defina `PUBLIC_SITE_URL` com a origem HTTPS definitiva no build de produção quando o novo site assumir o domínio. Builds da Vercel com `VERCEL_ENV=preview` geram `noindex` e `robots.txt` bloqueado. Veja [a preparação de SEO/GEO](docs/seo-geo.md) antes da troca do domínio.
 
 ## Fontes e materiais
 

@@ -5,6 +5,7 @@ import { units, timeline } from '../src/content.mjs';
 import { unitsEn, timelineEn } from '../src/english.mjs';
 import { unitsEs, timelineEs } from '../src/spanish.mjs';
 import { layout, eyebrow, button, arrow, globe, photo, brandArtwork, route } from '../src/components.mjs';
+import { absoluteURL, robotsText, sitemapXML } from '../src/seo.mjs';
 
 const out = new URL('../dist/', import.meta.url);
 await mkdir(out, { recursive: true });
@@ -97,8 +98,15 @@ await page('/es/our-history/', layout({ title: 'Nuestra historia — Una trayect
 const notFound = layout({ title: 'Página não encontrada | GlobalK', description: 'Encontre seu caminho de volta para a GlobalK.', path: '/', current: 'error', content: `<section class="error-section wrap">${eyebrow('404 · Página não encontrada')}<h1 class="display">Vamos encontrar<br>outro <em>caminho.</em></h1><p>Esse endereço não está disponível. Explore as unidades de negócio ou volte ao início.</p>${button('Voltar ao início', '/')}${button('Conhecer as unidades', '/#unidades', true)}</section>` });
 await writeFile(new URL('404.html', out), notFound);
 const paths = ['/', ...units.map(u => `/${u.slug}/`), '/our-history/', '/en/', ...unitsEn.map(u => `/en/${u.slug}/`), '/en/our-history/', '/es/', ...unitsEs.map(u => `/es/${u.slug}/`), '/es/our-history/'];
-await writeFile(new URL('sitemap.xml', out), `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${paths.map(path => `<url><loc>https://globalk-site.vercel.app${path}</loc></url>`).join('')}</urlset>`);
-await writeFile(new URL('robots.txt', out), 'User-agent: *\nAllow: /\n\nSitemap: https://globalk-site.vercel.app/sitemap.xml\n');
-const social = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630"><rect width="1200" height="630" fill="#0c0c0c"/><circle cx="1100" cy="300" r="350" fill="none" stroke="#cc0d0d" stroke-width="2"/><circle cx="1100" cy="300" r="270" fill="none" stroke="#cc0d0d" stroke-width="1"/><circle cx="1100" cy="300" r="190" fill="none" stroke="#cc0d0d" stroke-width="1"/><text x="70" y="100" fill="#f0ece4" font-family="Arial,sans-serif" font-size="38">GlobalK</text><text x="70" y="290" fill="#f0ece4" font-family="Georgia,serif" font-size="89">O mundo se</text><text x="70" y="397" fill="#f04a3c" font-family="Georgia,serif" font-size="89" font-style="italic">conecta aqui.</text><text x="75" y="551" fill="#b8b3ac" font-family="Arial,sans-serif" font-size="23">MARCAS · PRODUTOS · OPERAÇÕES</text></svg>`;
-await sharp(Buffer.from(social)).png().toFile(fileURLToPath(new URL('assets/social-card.png', out)));
-console.log(`Build concluído: ${paths.length} páginas, 404, sitemap e recursos locais.`);
+await writeFile(new URL('sitemap.xml', out), sitemapXML(paths));
+await writeFile(new URL('robots.txt', out), robotsText);
+await writeFile(new URL('llms.txt', out), `# GlobalK\n\nGlobalK connects international brands to a local operation in Brazil. Its business units are Economize, Multi-K, Safe-K and Trade-K. The group is based in Sorocaba, São Paulo, Brazil.\n\n## Official pages\n\n- Portuguese: ${absoluteURL('/')}\n- English: ${absoluteURL('/en/')}\n- Spanish: ${absoluteURL('/es/')}\n- Brazilian market entry: ${absoluteURL('/globalk/')}\n- Economize: ${absoluteURL('/economize/')}\n- Multi-K: ${absoluteURL('/multik/')}\n- Safe-K: ${absoluteURL('/safek/')}\n- Trade-K: ${absoluteURL('/tradek/')}\n- Group history: ${absoluteURL('/our-history/')}\n\nFor current details and inquiries, use the linked pages. This file is a navigation aid, not a substitute for them.\n`);
+const socialCards = {
+  pt: ['Conectamos', 'marcas.', 'PRODUTOS · PESSOAS · MERCADOS'],
+  en: ['Connecting', 'brands.', 'PRODUCTS · PEOPLE · MARKETS'],
+  es: ['Conectamos', 'marcas.', 'PRODUCTOS · PERSONAS · MERCADOS'],
+};
+for (const [locale, [lineOne, lineTwo, tagline]] of Object.entries(socialCards)) {
+  const social = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630"><rect width="1200" height="630" fill="#0c0c0c"/><circle cx="1100" cy="300" r="350" fill="none" stroke="#cc0d0d" stroke-width="2"/><circle cx="1100" cy="300" r="270" fill="none" stroke="#cc0d0d" stroke-width="1"/><circle cx="1100" cy="300" r="190" fill="none" stroke="#cc0d0d" stroke-width="1"/><text x="70" y="100" fill="#f0ece4" font-family="Arial,sans-serif" font-size="38">GlobalK</text><text x="70" y="295" fill="#f0ece4" font-family="Arial,sans-serif" font-size="96">${lineOne}</text><text x="70" y="405" fill="#f14a3e" font-family="Arial,sans-serif" font-size="96">${lineTwo}</text><text x="75" y="551" fill="#b8b3ac" font-family="Arial,sans-serif" font-size="23">${tagline}</text></svg>`;
+  await sharp(Buffer.from(social)).png().toFile(fileURLToPath(new URL(`assets/social-card-${locale}.png`, out)));
+}console.log(`Build concluído: ${paths.length} páginas, 404, sitemap e recursos locais.`);
