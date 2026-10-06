@@ -140,4 +140,11 @@ test('Sitemap contém todas as páginas e não inclui páginas de template', asy
   const notFound = parseHTML(await readFile(resolve(root, '404.html'), 'utf8')).document;
   assert.equal(notFound.querySelector('meta[name="robots"]').content, 'noindex,follow');
   assert.ok(!notFound.querySelector('link[rel="canonical"], script[type="application/ld+json"]'));
+  assert.equal(notFound.querySelectorAll('h1').length, 1);
+  for (const href of ['/', '/#unidades', '/our-history/', '#contato']) {
+    const link = notFound.querySelector(`main a[href="${href}"]`);
+    assert.ok(link, `404 missing recovery link ${href}`);
+    const target = new URL(href, SITE_URL);
+    assert.ok(docs.get(target.pathname)?.getElementById(target.hash.slice(1)) || (target.hash === '' && docs.has(target.pathname)) || href === '#contato');
+  }
 });
