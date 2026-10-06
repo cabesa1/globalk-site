@@ -8,22 +8,24 @@ import vm from 'node:vm';
 
 const root = fileURLToPath(new URL('../dist/', import.meta.url));
 const ptPaths = ['/', '/globalk/', '/economize/', '/multik/', '/safek/', '/tradek/', '/our-history/'];
-const paths = [...ptPaths, ...ptPaths.map(path => `/en${path}`)];
+const paths = [...ptPaths, ...ptPaths.map(path => `/en${path}`), ...ptPaths.map(path => `/es${path}`)];
 const docs = new Map();
 for (const path of paths) docs.set(path, parseHTML(await readFile(resolve(root, `.${path}/index.html`), 'utf8')).document);
 
 test('Todas as páginas possuem estrutura semântica, SEO e contato acessível', () => {
   const titles = new Set();
   for (const [path, document] of docs) {
-    assert.equal(document.documentElement.lang, path.startsWith('/en/') ? 'en' : 'pt-BR', path);
+    assert.equal(document.documentElement.lang, path.startsWith('/en/') ? 'en' : path.startsWith('/es/') ? 'es' : 'pt-BR', path);
     assert.equal(document.querySelectorAll('h1').length, 1, path);
     assert.equal(document.querySelectorAll('main').length, 1, path);
     assert.ok(document.querySelector('meta[name="viewport"]')?.content.includes('width=device-width'), path);
     assert.ok(document.querySelector('meta[name="description"]')?.content.length > 50, path);
     assert.equal(document.querySelector('link[rel="canonical"]').href, `https://globalk-site.vercel.app${path}`);
-    const equivalent = path.startsWith('/en/') ? path.slice(3) : `/en${path}`;
-    assert.ok(document.querySelector(`.language-switcher a[href="${equivalent}"]`), `Language switch: ${path}`);
-    assert.equal(document.querySelectorAll('link[rel="alternate"][hreflang]').length, 3, path);
+    const basePath = path.replace(/^\/(en|es)(?=\/)/, '');
+    for (const equivalent of [basePath, `/en${basePath}`, `/es${basePath}`]) {
+      assert.ok(document.querySelector(`.language-switcher a[href="${equivalent}"]`), `Language switch: ${path} -> ${equivalent}`);
+    }
+    assert.equal(document.querySelectorAll('link[rel="alternate"][hreflang]').length, 4, path);
     assert.ok(document.querySelector('a[href^="mailto:"]'), path);
     assert.ok(document.querySelector('a[href="tel:+551132305636"]'), path);
     assert.ok(document.querySelector('label[for="contact-topic"]'), path);
@@ -99,13 +101,13 @@ test('JavaScript inicializa sem bibliotecas externas e atualiza o assunto do con
     const emailURL = new URL(href);
     assert.equal(emailURL.protocol, 'mailto:');
     assert.equal(emailURL.pathname, 'globalk@globalk.com.br');
-    assert.equal(emailURL.searchParams.get('subject'), `${path.startsWith('/en/') ? 'Website inquiry' : 'Contato pelo site'} — Multi-K`);
+    assert.equal(emailURL.searchParams.get('subject'), `${path.startsWith('/en/') ? 'Website inquiry' : path.startsWith('/es/') ? 'Consulta desde el sitio web' : 'Contato pelo site'} — Multi-K`);
   }
 });
 
 test('Sitemap contém todas as páginas e não inclui páginas de template', async () => {
   const sitemap = await readFile(resolve(root, 'sitemap.xml'), 'utf8');
   for (const path of paths) assert.ok(sitemap.includes(`<loc>https://globalk-site.vercel.app${path}</loc>`));
-  assert.equal((sitemap.match(/<loc>/g) || []).length, 14);
+  assert.equal((sitemap.match(/<loc>/g) || []).length, 21);
   assert.ok(!sitemap.includes('wpr_templates'));
 });

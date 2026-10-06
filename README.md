@@ -1,6 +1,6 @@
 # GlobalK
 
-Site institucional mobile first, em português e inglês, com 14 páginas estáticas. O seletor PT | EN no cabeçalho mantém o visitante na página equivalente. Direção editorial em preto e vermelho, tipografia Playfair + Satoshi e materiais de marca provenientes do site original.
+Site institucional mobile first, em português, inglês e espanhol, com 21 páginas estáticas. O seletor PT | EN | ES no cabeçalho mantém o visitante na página equivalente. Direção editorial em preto e vermelho, tipografia Satoshi e materiais de marca provenientes do site original.
 
 ## Executar localmente
 
@@ -28,17 +28,19 @@ O servidor lê `dist`. Após alterar conteúdo, CSS ou JavaScript, rode `npm run
 | `/tradek/` | Importação e financiamento |
 | `/our-history/` | Trajetória do grupo |
 
-As sete versões em inglês usam o prefixo `/en/` (por exemplo, `/en/tradek/` e `/en/our-history/`).
+As sete versões em inglês usam o prefixo `/en/`; as sete em espanhol usam `/es/` (por exemplo, `/es/tradek/` e `/es/our-history/`).
 
 ## Estrutura
 
 - `src/content.mjs`: textos e informações das unidades e da história.
 - `src/english.mjs`: traduções das unidades e da história.
+- `src/spanish.mjs`: traduções em espanhol das unidades e da história.
 - `src/components.mjs`: cabeçalho, menu, contatos, rodapé, imagens e estrutura das páginas.
 - `scripts/build.mjs`: geração do HTML, sitemap, robots, página 404 e imagem de compartilhamento.
 - `public/styles.css`: estilos, começando pelo layout de celular e expandindo em 600, 960 e 1400 px.
 - `public/app.js`: menu acessível, animações progressivas e assunto do contato.
 - `public/assets/`: imagens WebP otimizadas e fontes locais.
+- `public/assets/brand-*.png`: logos oficiais da Multi-K, Safe-K e Trade-K fornecidos para esta revisão; os arquivos originais foram preservados.
 - `public/assets/sources.json`: procedência dos materiais visuais do site original.
 - `scripts/prepare-assets.mjs`: atualização opcional dos materiais a partir das fontes públicas. Não é necessário para o build normal.
 - `scripts/serve.mjs`: servidor local de arquivos estáticos.
@@ -65,7 +67,7 @@ As sete versões em inglês usam o prefixo `/en/` (por exemplo, `/en/tradek/` e 
 npm run check
 ```
 
-Os testes verificam as 14 páginas, troca PT/EN, destinos locais, âncoras, IDs, semântica, SEO básico, recursos, limites de peso, correções editoriais e a atualização do assunto do e-mail em um DOM de teste.
+Os testes verificam as 21 páginas, troca PT/EN/ES, destinos locais, âncoras, IDs, semântica, SEO básico, recursos, limites de peso, correções editoriais e a atualização do assunto do e-mail em um DOM de teste.
 
 Na entrega inicial, as sete rotas em português e os principais recursos foram testados por HTTP no servidor local, incluindo a resposta 404. As rotas em inglês passaram nos testes de build e integridade do DOM.
 
@@ -81,9 +83,8 @@ URLs canônicas, sitemap e Open Graph usam `https://globalk-site.vercel.app`. Em
 
 ## Fontes e materiais
 
-- Informações e imagens: [GlobalK](https://globalk.com.br/), com URLs individuais em `public/assets/sources.json`.
+- Informações e fotografias: [GlobalK](https://globalk.com.br/), com URLs individuais em `public/assets/sources.json`. Os novos logos da Multi-K, Safe-K e Trade-K foram fornecidos pelo usuário.
 - Satoshi: [Fontshare](https://www.fontshare.com/fonts/satoshi).
-- Playfair Display: [Google Fonts](https://fonts.google.com/specimen/Playfair+Display), arquivos distribuídos pelo Fontsource.
 - O globo editorial e o favicon são SVGs locais. Não são mapas de precisão nem uma reformulação do logotipo oficial.
 
 Os materiais e as informações comerciais devem ser aprovados pelo responsável pela marca antes da publicação.

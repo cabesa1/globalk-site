@@ -75,7 +75,7 @@
   const topic = document.querySelector('#contact-topic');
   const email = document.querySelector('#topic-email');
   topic?.addEventListener('change', () => {
-    const subject = document.body.dataset.locale === 'en' ? 'Website inquiry' : 'Contato pelo site';
+    const subject = document.body.dataset.locale === 'en' ? 'Website inquiry' : document.body.dataset.locale === 'es' ? 'Consulta desde el sitio web' : 'Contato pelo site';
     email.href = `mailto:globalk@globalk.com.br?subject=${encodeURIComponent(`${subject} — ${topic.value}`)}`;
   });
 })();
