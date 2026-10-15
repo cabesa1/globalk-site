@@ -83,11 +83,15 @@
     });
   }
   document.querySelectorAll('.globe').forEach(globe => {
+    // Keep the lightweight SVG on smaller screens, where continuous canvas work is costly.
+    const desktopMotion = window.matchMedia('(min-width: 960px) and (prefers-reduced-motion: no-preference)');
+    if (!desktopMotion.matches) return;
     const canvas = globe.querySelector('canvas');
     const context = canvas?.getContext?.('2d');
     if (!context) return;
-    const points = Array.from({ length: 1200 }, (_, index) => {
-      const y = 1 - index / 1199 * 2;
+    const pointCount = 520;
+    const points = Array.from({ length: pointCount }, (_, index) => {
+      const y = 1 - index / (pointCount - 1) * 2;
       const ring = Math.sqrt(1 - y * y);
       const angle = Math.PI * (3 - Math.sqrt(5)) * index;
       return [Math.cos(angle) * ring, y, Math.sin(angle) * ring];
@@ -100,7 +104,7 @@
     const resize = () => {
       size = globe.clientWidth;
       if (!size) return;
-      const scale = Math.min(window.devicePixelRatio || 1, 2);
+      const scale = Math.min(window.devicePixelRatio || 1, 1.5);
       canvas.width = Math.round(size * scale);
       canvas.height = Math.round(size * scale);
       context.setTransform(scale, 0, 0, scale, 0, 0);
@@ -124,12 +128,9 @@
       const radius = size * .335;
       orbit(radius * 1.34, radius * .42, -.5, .36);
       orbit(radius * 1.29, radius * .6, .9, .2);
-      const sphere = context.createRadialGradient(center - radius * .35, center - radius * .3, radius * .1, center, center, radius);
-      sphere.addColorStop(0, '#1b0c0d');
-      sphere.addColorStop(1, '#0b0909');
       context.beginPath();
       context.arc(center, center, radius, 0, Math.PI * 2);
-      context.fillStyle = sphere;
+      context.fillStyle = '#100909';
       context.fill();
       context.strokeStyle = 'rgba(225,25,32,.35)';
       context.stroke();
@@ -138,21 +139,22 @@
       const cos = Math.cos(turn);
       const tiltSin = Math.sin(.4);
       const tiltCos = Math.cos(.4);
+      context.fillStyle = '#eb1f27';
       for (const [x, y, z] of points) {
         const rotatedX = x * cos + z * sin;
         const rotatedZ = z * cos - x * sin;
         const projectedY = y * tiltCos - rotatedZ * tiltSin;
         const depth = y * tiltSin + rotatedZ * tiltCos;
         if (depth < -.05) continue;
-        context.beginPath();
-        context.arc(center + rotatedX * radius, center + projectedY * radius, Math.max(1, radius * .009 * (1 + depth * .3)), 0, Math.PI * 2);
-        context.fillStyle = `rgba(235,31,39,${.38 + depth * .58})`;
-        context.fill();
+        context.globalAlpha = .45 + depth * .5;
+        const dotSize = Math.max(1.5, radius * .014);
+        context.fillRect(center + rotatedX * radius, center + projectedY * radius, dotSize, dotSize);
       }
+      context.globalAlpha = 1;
     };
     const animate = time => {
-      if (!visible || document.hidden || reducedMotion.matches) { frame = null; return; }
-      if (time - lastTime >= 40) {
+      if (!visible || document.hidden || !desktopMotion.matches) { frame = null; return; }
+      if (time - lastTime >= 80) {
         rotation += Math.min(time - lastTime, 80) * .00012;
         draw();
         lastTime = time;
@@ -160,7 +162,7 @@
       frame = requestAnimationFrame(animate);
     };
     const start = () => {
-      if (!frame && visible && !document.hidden && !reducedMotion.matches) frame = requestAnimationFrame(animate);
+      if (!frame && visible && !document.hidden && desktopMotion.matches) frame = requestAnimationFrame(animate);
     };
     globe.classList.add('is-ready');
     resize();
@@ -171,7 +173,12 @@
       if (visible) start();
     }).observe(globe);
     document.addEventListener('visibilitychange', start);
-    reducedMotion.addEventListener('change', event => { if (event.matches && frame) cancelAnimationFrame(frame); frame = null; start(); });
+    desktopMotion.addEventListener('change', event => {
+      globe.classList.toggle('is-ready', event.matches);
+      if (!event.matches && frame) cancelAnimationFrame(frame);
+      frame = null;
+      start();
+    });
     start();
   });
   const topic = document.querySelector('#contact-topic');
