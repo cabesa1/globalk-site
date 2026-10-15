@@ -87,6 +87,29 @@ test('Correções editoriais: nenhuma meta apresentada como conquista ou bloco c
   }
 });
 
+test('Timeline accordion keeps all seven milestones available in each language', () => {
+  for (const locale of ['', '/en', '/es']) {
+    const path = `${locale}/our-history/`;
+    const items = [...docs.get(path).querySelectorAll('.timeline-accordion details')];
+    assert.equal(items.length, 7, path);
+    assert.equal(items.filter(item => item.hasAttribute('open')).length, 1, path);
+    for (const item of items) {
+      assert.equal(item.getAttribute('name'), `timeline-${locale.slice(1) || 'pt'}`, path);
+      assert.ok(item.querySelector('summary .timeline-title')?.textContent.trim(), path);
+      assert.ok(item.querySelector('.timeline-panel p')?.textContent.trim(), path);
+    }
+  }
+});
+
+test('Home globe has a responsive canvas and a no-JavaScript fallback in each language', () => {
+  for (const path of ['/', '/en/', '/es/']) {
+    const globe = docs.get(path).querySelector('.hero-art .globe');
+    assert.ok(globe, path);
+    assert.ok(globe.querySelector('canvas.globe-canvas'), path);
+    assert.ok(globe.querySelector('svg.globe-fallback circle'), path);
+  }
+});
+
 test('JavaScript inicializa sem bibliotecas externas e atualiza o assunto do contato', async () => {
   const code = await readFile(resolve(root, 'app.js'), 'utf8');
   for (const path of paths) {

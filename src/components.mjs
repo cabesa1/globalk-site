@@ -20,23 +20,18 @@ export function photo(name, alt, { hero = false, className = '', sizes = '(min-w
 export const brandArtwork = (name, alt, hero = false) => `<img src="/assets/${esc(name)}" width="667" height="667" alt="${esc(alt)}" loading="${hero ? 'eager' : 'lazy'}" decoding="async"${hero ? ' fetchpriority="high"' : ''}>`;
 
 export function globe(id = 'main', locale = 'pt') {
-  const meridians = Array.from({ length: 11 }, (_, i) => `<ellipse cx="300" cy="300" rx="${22 + i * 19.3}" ry="222"/>`).join('');
-  const parallels = Array.from({ length: 11 }, (_, i) => { const y = 116 + i * 36.8; const rx = Math.sqrt(222 ** 2 - (y - 300) ** 2); return `<ellipse cx="300" cy="${y}" rx="${rx.toFixed(2)}" ry="${(rx * .19).toFixed(2)}"/>`; }).join('');
-  return `<svg class="globe" viewBox="0 0 600 600" fill="none" aria-hidden="true">
-  <defs><clipPath id="sphere-${id}"><circle cx="300" cy="300" r="222"/></clipPath><pattern id="dots-${id}" width="6" height="6" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.2" fill="currentColor"/></pattern></defs>
-  <g class="globe-orbits" stroke="currentColor" stroke-width=".7"><ellipse cx="300" cy="300" rx="289" ry="86" transform="rotate(-27 300 300)"/><ellipse cx="300" cy="300" rx="276" ry="256" transform="rotate(25 300 300)" stroke-dasharray="2 9" opacity=".3"/></g>
-  <circle cx="300" cy="300" r="222" fill="#11100f" stroke="currentColor" stroke-width="1.2"/>
-  <g clip-path="url(#sphere-${id})"><g class="globe-grid" stroke="currentColor" stroke-width=".65" opacity=".43" transform="rotate(-15 300 300)">${meridians}${parallels}</g>
-  <g fill="url(#dots-${id})" stroke="currentColor" stroke-width=".65" opacity=".85">
-  <path d="m137 169 27-32 37-10 35 12 21-7 19 27-13 22-29 11-12 24-22 6-5 25-24-7-20-31-29-14-7-23z"/>
-  <path d="m219 252 20-7 23 19 30 14 13 25-16 22-7 37-24 34-10 27-13 12-9-32 4-37-16-30-11-32 8-22z"/>
-  <path d="m331 145 40-15 49 15 31 30 30 9 18 38-15 27-27 3-24-17-17 16-30-10-18-20-24 2-14-20-24-4-3-28z"/>
-  <path d="m332 231 31-8 33 24 10 30-19 27-15 43-22 17-15-27-6-41-19-27 6-26z"/>
-  <path d="m419 353 23-15 30 5 20 23-16 17-29 6-24-15z"/>
-  </g></g><g class="globe-pulse"><circle cx="249" cy="349" r="6" fill="#f1ede6"/><circle cx="249" cy="349" r="14" stroke="#f1ede6" opacity=".35"/></g>
-  <path d="M255 349h78l26 26h115" stroke="#f1ede6" stroke-width=".65" opacity=".65"/><text x="361" y="367" fill="#f1ede6" font-family="Satoshi, sans-serif" font-size="10" letter-spacing="2">${locale === 'en' ? 'BRAZIL' : 'BRASIL'}</text>
-  <circle cx="46" cy="386" r="3" fill="currentColor"/><circle cx="533" cy="166" r="3" fill="currentColor"/>
-  </svg>`;
+  const dots = Array.from({ length: 480 }, (_, i) => {
+    const y = 1 - i / 479 * 2;
+    const r = Math.sqrt(1 - y * y);
+    const angle = Math.PI * (3 - Math.sqrt(5)) * i;
+    const x = Math.cos(angle) * r;
+    const z = Math.sin(angle) * r;
+    return z > 0 ? `<circle cx="${(300 + x * 204).toFixed(1)}" cy="${(300 + y * 204).toFixed(1)}" r="1.5"/>` : '';
+  }).join('');
+  return `<div class="globe" aria-hidden="true" data-globe="${id}">
+    <svg class="globe-fallback" viewBox="0 0 600 600" fill="none"><ellipse cx="300" cy="300" rx="280" ry="85" transform="rotate(-28 300 300)" stroke="#cf1117" opacity=".6"/><ellipse cx="300" cy="300" rx="270" ry="130" transform="rotate(54 300 300)" stroke="#cf1117" opacity=".3"/><circle cx="300" cy="300" r="204" fill="#100909" stroke="#cf1117" opacity=".9"/><g fill="#e11920">${dots}</g></svg>
+    <canvas class="globe-canvas" width="600" height="600"></canvas>
+  </div>`;
 }
 
 export function header(current = 'home', locale = 'pt', path = '/') {
