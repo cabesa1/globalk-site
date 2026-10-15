@@ -110,6 +110,17 @@ test('Home globe has a responsive canvas and a no-JavaScript fallback in each la
   }
 });
 
+test('Mobile view keeps the globe fallback without starting canvas rendering', async () => {
+  const code = await readFile(resolve(root, 'app.js'), 'utf8');
+  const { document, window } = parseHTML(await readFile(resolve(root, 'index.html'), 'utf8'));
+  let canvasStarts = 0;
+  document.querySelector('.globe-canvas').getContext = () => { canvasStarts++; return null; };
+  window.matchMedia = query => ({ matches: !query.includes('min-width: 960px'), addEventListener() {} });
+  vm.runInNewContext(code, { document, window, location: new URL('https://globalk-site.vercel.app/'), URL, encodeURIComponent, requestAnimationFrame: fn => fn() });
+  assert.equal(canvasStarts, 0);
+  assert.ok(!document.querySelector('.globe').classList.contains('is-ready'));
+});
+
 test('JavaScript inicializa sem bibliotecas externas e atualiza o assunto do contato', async () => {
   const code = await readFile(resolve(root, 'app.js'), 'utf8');
   for (const path of paths) {
