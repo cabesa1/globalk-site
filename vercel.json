@@ -3,9 +3,35 @@
   "outputDirectory": "dist",
   "trailingSlash": true,
   "headers": [
-    { "source": "/(.*)", "headers": [
-      { "key": "X-Content-Type-Options", "value": "nosniff" },
-      { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" }
-    ] }
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        }
+      ]
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/our-history/:path*",
+      "destination": "/#trajetoria",
+      "permanent": true
+    },
+    {
+      "source": "/en/our-history/:path*",
+      "destination": "/en/#trajetoria",
+      "permanent": true
+    },
+    {
+      "source": "/es/our-history/:path*",
+      "destination": "/es/#trajetoria",
+      "permanent": true
+    }
   ]
 }
