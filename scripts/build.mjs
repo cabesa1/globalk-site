@@ -155,7 +155,7 @@ for (const unit of unitsEs) {
 const notFoundContent = `<section class="error-section wrap" aria-labelledby="error-title">
   <div class="error-copy">${eyebrow('Erro 404 · Página não encontrada')}<h1 id="error-title">Perdemos esta<br><em>conexão.</em></h1><p class="error-description">O endereço que você tentou acessar não está disponível. Vamos encontrar outro caminho pelo grupo GlobalK.</p><div class="error-actions">${button('Voltar ao início', '/')}${button('Ver as unidades', '/#orientacao', true)}</div></div>
   <div class="error-art" aria-hidden="true"><span class="error-art-number">404</span><span class="error-art-point"></span><span class="error-art-caption">CONEXÃO INTERROMPIDA <span>·</span> GLOBALK</span></div>
-  <nav class="error-shortcuts" aria-label="Outros caminhos"><span class="small-label">CONTINUE EXPLORANDO</span><a href="#contato">Falar com a GlobalK ${arrow(true)}</a></nav>
+  <nav class="error-shortcuts" aria-label="Outros caminhos"><span class="small-label">CONTINUE EXPLORANDO</span><a href="/#contato">Falar com a GlobalK ${arrow(true)}</a></nav>
 </section>`;
 const notFound = layout({ title: 'Página não encontrada | GlobalK', description: 'Encontre seu caminho de volta para a GlobalK.', path: '/', current: 'error', content: notFoundContent });
 await writeFile(new URL('404.html', out), notFound);
