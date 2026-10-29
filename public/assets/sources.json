@@ -40,6 +40,16 @@
     {
       "name": "brand-tradek",
       "source": "https://globalk.com.br/wp-content/uploads/2025/11/tradek.png"
+    },
+    {
+      "name": "nanium-logo",
+      "source": "User-provided logo reference in chat, 2026-10-29",
+      "processing": "Horizontal raster prepared with imagegen from the supplied reference; white lettering and transparent background prepared as a full-resolution PNG with fractional edge coverage for the dark UI. Not original vector artwork."
+    },
+    {
+      "name": "realize-logo",
+      "source": "User-provided logo reference in chat, 2026-10-29",
+      "processing": "Horizontal raster prepared with imagegen from the supplied reference. White background removed at source resolution with fractional alpha coverage; pink lettering and lime-green counter preserved. Not original vector artwork."
     }
   ],
   "outputs": [

@@ -1,6 +1,6 @@
 # GlobalK
 
-Site institucional mobile first, em português, inglês e espanhol, com 21 páginas estáticas. O seletor PT | EN | ES no cabeçalho mantém o visitante na página equivalente. Direção editorial em preto e vermelho, tipografia Satoshi e materiais de marca provenientes do site original.
+Site institucional mobile first, em português, inglês e espanhol, com 24 páginas estáticas. O seletor PT | EN | ES no cabeçalho mantém o visitante na página equivalente. Direção editorial em preto e vermelho, tipografia Satoshi e materiais de marca provenientes do site original.
 
 ## Executar localmente
 
@@ -20,15 +20,18 @@ O servidor lê `dist`. Após alterar conteúdo, CSS ou JavaScript, rode `npm run
 
 | URL | Conteúdo |
 | --- | --- |
-| `/` | Grupo, unidades de negócio, resumo da trajetória e contato |
+| `/` | Árvore das unidades, grupo, linha do tempo completa e contato |
 | `/globalk/` | Entrada e operação no mercado brasileiro |
 | `/economize/` | Open Box e operação comercial |
 | `/multik/` | Organização e utilidades |
 | `/safek/` | Ambientes livres de celulares |
 | `/tradek/` | Importação e financiamento |
-| `/our-history/` | Trajetória do grupo |
+| `/nanium/` | Produção e montagem de computadores gamer |
+| `/realize/` | Lotes Open Box para pequenos e médios empresários |
 
-As sete versões em inglês usam o prefixo `/en/`; as sete em espanhol usam `/es/` (por exemplo, `/es/tradek/` e `/es/our-history/`).
+As oito versões em inglês usam o prefixo `/en/`; as oito em espanhol usam `/es/`. A história fica em `/#trajetoria`, `/en/#trajetoria` e `/es/#trajetoria`. As antigas páginas `/our-history/` redirecionam para a seção no idioma correspondente.
+
+A árvore da home parte da GlobalK e agrupa as seis marcas em pares. Nanium e Realize usam versões horizontais preparadas a partir das referências enviadas no chat, adaptadas ao fundo escuro; os arquivos vetoriais originais ainda não foram fornecidos. Ainda faltam fotos para as duas páginas. As informações dessas unidades e o desconto de até 50% da Realize foram fornecidos pelo responsável pelo projeto.
 
 ## Estrutura
 

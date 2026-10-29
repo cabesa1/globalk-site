@@ -9,6 +9,11 @@ const server = http.createServer(async (request, response) => {
   if (!['GET', 'HEAD'].includes(request.method)) { response.writeHead(405, { Allow: 'GET, HEAD' }); return response.end(); }
   try {
     const path = decodeURIComponent(new URL(request.url, 'http://localhost').pathname);
+    const retiredHistory = path.match(/^(\/(?:en|es))?\/our-history(?:\/.*)?$/);
+    if (retiredHistory) {
+      response.writeHead(308, { Location: `${retiredHistory[1] || ''}/#trajetoria` });
+      return response.end();
+    }
     let target = resolve(root, `.${path}`);
     if (target !== resolve(root) && !target.startsWith(resolve(root) + sep)) { response.writeHead(403); return response.end(); }
     let status = 200;

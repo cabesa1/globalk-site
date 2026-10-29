@@ -10,7 +10,7 @@ Se o domínio antigo continuar servindo conteúdo em paralelo, haverá duas vers
 
 ## Verificação após publicação
 
-1. Confirmar `200` para as 21 URLs do sitemap e `404` para uma URL inexistente.
+1. Confirmar `200` para as 24 URLs do sitemap, redirecionamento das antigas páginas de história para a home e `404` para uma URL inexistente.
 2. Confirmar `https://<domínio>/robots.txt`, `sitemap.xml` e as alternativas PT/EN/ES em cada página.
 3. Validar os dados estruturados e inspecionar as páginas principais no Google Search Console. Enviar o sitemap após a troca do domínio.
 4. Conferir títulos, descrições e imagens ao compartilhar as três versões.
