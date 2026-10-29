@@ -137,7 +137,7 @@ test('Retired history pages redirect to the home timeline and are not generated'
   const config = JSON.parse(await readFile(resolve(root, '../vercel.json'), 'utf8'));
   for (const locale of ['', '/en', '/es']) {
     await assert.rejects(stat(resolve(root, `.${locale}/our-history/index.html`)), { code: 'ENOENT' });
-    assert.ok(config.redirects.some(rule => rule.source === `${locale}/our-history/:path*` && rule.destination === `${locale}/#trajetoria` && rule.permanent));
+    assert.ok(config.redirects.some(rule => rule.source === `${locale}/our-history/:path*/` && rule.destination === `${locale}/#trajetoria` && rule.permanent));
   }
 });
 
