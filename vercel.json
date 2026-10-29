@@ -19,17 +19,17 @@
   ],
   "redirects": [
     {
-      "source": "/our-history/:path*",
+      "source": "/our-history/:path*/",
       "destination": "/#trajetoria",
       "permanent": true
     },
     {
-      "source": "/en/our-history/:path*",
+      "source": "/en/our-history/:path*/",
       "destination": "/en/#trajetoria",
       "permanent": true
     },
     {
-      "source": "/es/our-history/:path*",
+      "source": "/es/our-history/:path*/",
       "destination": "/es/#trajetoria",
       "permanent": true
     }
