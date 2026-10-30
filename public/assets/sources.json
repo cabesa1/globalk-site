@@ -50,6 +50,36 @@
       "name": "realize-logo",
       "source": "User-provided logo reference in chat, 2026-10-29",
       "processing": "Horizontal raster prepared with imagegen from the supplied reference. White background removed at source resolution with fractional alpha coverage; pink lettering and lime-green counter preserved. Not original vector artwork."
+    },
+    {
+      "name": "safek-guardar",
+      "source": "../SAFEK/assets/safek-guardar-tratada.webp",
+      "approval": "Photo already used in the NEW SAFE-K project, como-funciona.html. Corrected to the new-site photos at the user request on 2026-10-30.",
+      "processing": "Resized to 360x480 and 720x960 WebP with contain; original photograph preserved. The middle photo shows the owner with the pouch, not the act of locking it."
+    },
+    {
+      "name": "safek-bloquear",
+      "source": "../SAFEK/assets/safek-viva-momento-tratada.webp",
+      "approval": "Photo already used in the NEW SAFE-K project, como-funciona.html. Corrected to the new-site photos at the user request on 2026-10-30.",
+      "processing": "Resized to 360x480 and 720x960 WebP with contain; original photograph preserved. The middle photo shows the owner with the pouch, not the act of locking it."
+    },
+    {
+      "name": "safek-liberar",
+      "source": "../SAFEK/assets/safek-desbloquear-tratada.webp",
+      "approval": "Photo already used in the NEW SAFE-K project, como-funciona.html. Corrected to the new-site photos at the user request on 2026-10-30.",
+      "processing": "Resized to 360x480 and 720x960 WebP with contain; original photograph preserved. The middle photo shows the owner with the pouch, not the act of locking it."
+    },
+    {
+      "name": "tradek-ship",
+      "source": "C:/Users/gui/Downloads/navio_TK_4k.jpg",
+      "approval": "Trade-K branded image supplied directly by the user on 2026-10-30.",
+      "processing": "Resized to 480px and 960px wide WebP. Full artwork retained."
+    },
+    {
+      "name": "tradek-motorcycles",
+      "source": "C:/Users/gui/Downloads/trade k.jpg",
+      "approval": "Trade-K branded image supplied directly by the user on 2026-10-30.",
+      "processing": "Resized to 480px and 960px wide WebP. Full artwork retained."
     }
   ],
   "outputs": [

@@ -6,8 +6,7 @@ export const arrow = (diagonal = false) => `<svg class="arrow" width="22" height
 export const socialLink = (slug, locale = 'pt') => {
   const handle = socialProfiles[slug];
   if (!handle) return '';
-  const name = units.find(unit => unit.slug === slug)?.name || 'GlobalK';
-  const label = locale === 'en' ? `Visit ${name} on Instagram (opens in a new tab)` : locale === 'es' ? `Visitar ${name} en Instagram (se abre en otra pestaña)` : `Visitar ${name} no Instagram (abre em nova aba)`;
+  const label = `Instagram @${handle} (${locale === 'en' ? 'opens in a new tab' : locale === 'es' ? 'se abre en otra pestaña' : 'abre em nova aba'})`;
   return `<a class="social-link" href="https://www.instagram.com/${handle}/" target="_blank" rel="noopener noreferrer" aria-label="${esc(label)}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".8" fill="currentColor" stroke="none"/></svg><span>Instagram <strong>@${handle}</strong></span></a>`;
 };
 export const eyebrow = (text, number = '') => `<p class="eyebrow">${number ? `<span class="section-number">${number}</span>` : '<span class="eyebrow-line" aria-hidden="true"></span>'}${text}</p>`;
@@ -21,7 +20,7 @@ const words = {
 };
 export const tr = (locale, key) => words[locale][key];
 export function photo(name, alt, { hero = false, className = '', sizes = '(min-width: 960px) 46vw, 100vw' } = {}) {
-  const dimensions = { economize: [960, 640], multik: [960, 1200], 'multik-detail': [960, 767], safek: [819, 1024], 'safek-studio': [960, 1200], tradek: [960, 960] }[name];
+  const dimensions = { economize: [960, 640], multik: [960, 1200], 'multik-detail': [960, 767], safek: [819, 1024], 'safek-studio': [960, 1200], tradek: [960, 960], 'tradek-ship': [960, 1200], 'tradek-motorcycles': [960, 1200] }[name];
   const actual = dimensions[0];
   return `<img class="${className}" src="/assets/${name}-960.webp" srcset="/assets/${name}-480.webp 480w, /assets/${name}-960.webp ${actual}w" sizes="${sizes}" width="${dimensions[0]}" height="${dimensions[1]}" alt="${esc(alt)}" loading="${hero ? 'eager' : 'lazy'}" decoding="async"${hero ? ' fetchpriority="high"' : ''}>`;
 }
@@ -53,8 +52,8 @@ export function header(current = 'home', locale = 'pt', path = '/') {
     <a class="logo" href="${route('/', locale)}" aria-label="GlobalK — ${w.home}"><img src="/assets/logo.webp" width="500" height="193" alt="GlobalK"></a>
     <nav class="desktop-nav" aria-label="${w.navigation}"><a href="${route('/#grupo', locale)}">${w.group}</a><a href="${route('/#orientacao', locale)}"${units.some(u => u.slug === current) ? ' class="active"' : ''}>${w.units}</a></nav>
     ${showContact ? `<a class="header-contact" href="#contato">${w.talk} ${arrow(true)}</a>` : ''}
-    <nav class="language-switcher" aria-label="Idioma / Language"><a href="${pagePT}" hreflang="pt-BR" lang="pt-BR" aria-label="Português"${locale === 'pt' ? ' aria-current="page"' : ''}>PT</a><span aria-hidden="true">/</span><a href="${pageEN}" hreflang="en" lang="en" aria-label="English"${locale === 'en' ? ' aria-current="page"' : ''}>EN</a><span aria-hidden="true">/</span><a href="${pageES}" hreflang="es" lang="es" aria-label="Español"${locale === 'es' ? ' aria-current="page"' : ''}>ES</a></nav>
-    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-menu" aria-label="${w.open}"><span>${w.menu}</span><span class="menu-icon" aria-hidden="true"><i></i><i></i></span></button>
+    <nav class="language-switcher" aria-label="Idioma / Language"><a href="${pagePT}" hreflang="pt-BR" lang="pt-BR" aria-label="PT — Português"${locale === 'pt' ? ' aria-current="page"' : ''}>PT</a><span aria-hidden="true">/</span><a href="${pageEN}" hreflang="en" lang="en" aria-label="EN — English"${locale === 'en' ? ' aria-current="page"' : ''}>EN</a><span aria-hidden="true">/</span><a href="${pageES}" hreflang="es" lang="es" aria-label="ES — Español"${locale === 'es' ? ' aria-current="page"' : ''}>ES</a></nav>
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-menu" aria-label="${w.menu} — ${w.open}"><span>${w.menu}</span><span class="menu-icon" aria-hidden="true"><i></i><i></i></span></button>
   </div><noscript><nav class="no-js-nav wrap" aria-label="${w.nojs}"><a href="${route('/#grupo', locale)}">${w.group}</a><a href="${route('/#orientacao', locale)}">${w.unitShort}</a>${showContact ? `<a href="#contato">${w.contact}</a>` : ''}</nav></noscript></header>
   <dialog class="menu-dialog" id="site-menu" aria-labelledby="menu-title"><div class="menu-shell wrap"><div class="menu-top"><span class="eyebrow" id="menu-title">${w.explore}</span><button class="menu-close" type="button" aria-label="${w.close}">${w.close} <span aria-hidden="true">×</span></button></div>
   <nav aria-label="${w.fullMenu}" class="menu-links"><a href="${route('/', locale)}"><span>01</span>${w.start} ${arrow(true)}</a><a href="${route('/#grupo', locale)}"><span>02</span>${w.group} ${arrow(true)}</a><a href="${route('/#orientacao', locale)}"><span>03</span>${w.unitShort} ${arrow(true)}</a>${showContact ? `<a href="#contato"><span>04</span>${w.contact} ${arrow(true)}</a>` : ''}</nav>

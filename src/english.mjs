@@ -71,7 +71,7 @@ const englishUnits = {
     title: 'Buying in Asia.<br>Importing with <em>a plan.</em>',
     description: 'Support for international purchases and financing solutions for Brazilian companies importing goods from Asia.',
     seo: 'Trade-K supports imports and financing of international purchases for Brazilian companies. A GlobalK business unit.',
-    alt: 'Shipping containers at a cargo terminal, an illustrative image of imports', brandAlt: 'Official Trade-K logo in white and green', imageCaption: 'Illustrative image of imports; this is not a Trade-K operation.',
+    alt: 'Cargo ship at a port in a Trade-K promotional image', brandAlt: 'Official Trade-K logo in white and green', imageCaption: 'Promotional image supplied by the Trade-K team.',
     audience: 'For Brazilian companies planning international purchases and exploring financing options.',
     heading: 'Purchasing and <em>financing.</em>',
     intro: 'Each project and its terms are assessed individually according to the business’s needs.',

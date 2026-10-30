@@ -32,6 +32,10 @@ test('Todas as páginas possuem estrutura semântica, SEO e contato acessível',
       assert.ok(document.querySelector(`.language-switcher a[href="${equivalent}"]`), `Language switch: ${path} -> ${equivalent}`);
     }
     assert.equal(document.querySelectorAll('link[rel="alternate"][hreflang]').length, 4, path);
+    for (const link of document.querySelectorAll('.language-switcher a, .social-link')) {
+      const visible = link.textContent.trim().replace(/\s+/g, ' ');
+      assert.ok(link.getAttribute('aria-label')?.includes(visible), `Accessible name must contain visible label: ${path} ${visible}`);
+    }
     const graph = JSON.parse(document.querySelector('script[type="application/ld+json"]').textContent)['@graph'];
     assert.equal(graph[0].url, `${SITE_URL}${path}`, path);
     assert.equal(graph[0].inLanguage, path.startsWith('/en/') ? 'en' : path.startsWith('/es/') ? 'es' : 'pt-BR', path);
@@ -176,10 +180,15 @@ test('Business paths and calls to action match their destinations in every langu
     assert.equal(safe.querySelectorAll('.service-list li').length, 3);
 
     const trade = docs.get(`${locale}/tradek/`);
-    assert.ok(trade.querySelector('.unit-hero-media img[src*="tradek-960.webp"]'));
+    assert.ok(trade.querySelector('.unit-hero-media img[src*="tradek-ship-960.webp"]'));
     assert.equal(trade.querySelectorAll('.service-list li').length, 2);
     for (const [document, destination] of [[safe, 'https://safek.com.br/'], [trade, 'https://www.tradek.com.br/']]) {
-      assert.ok(!document.querySelector('.unit-cta, #contato'));
+      assert.ok(!document.querySelector('#contato'));
+      const closing = document.querySelector('.unit-continuation a.button');
+      assert.equal(closing?.href, destination);
+      assert.equal(closing?.getAttribute('target'), '_blank');
+      assert.ok(closing?.getAttribute('aria-label').includes(locale === '/en' ? 'opens in a new tab' : locale === '/es' ? 'se abre en una pestaña nueva' : 'nova aba'));
+      assert.ok(document.querySelector('.next-unit').previousElementSibling.classList.contains('unit-continuation'));
       assert.equal(document.querySelectorAll('.unit-hero-copy a.button').length, 1);
       assert.equal(document.querySelector('.unit-hero-copy a.button').href, destination);
     }
@@ -249,7 +258,8 @@ test('Sitemap contém todas as páginas e não inclui páginas de template', asy
   assert.equal(notFound.querySelector('meta[name="robots"]').content, 'noindex,follow');
   assert.ok(!notFound.querySelector('link[rel="canonical"], script[type="application/ld+json"]'));
   assert.equal(notFound.querySelectorAll('h1').length, 1);
-  for (const href of ['/', '/#orientacao', '#contato']) {
+  assert.ok(!notFound.querySelector('#contato, #contact-topic, a[href="#contato"]'));
+  for (const href of ['/', '/#orientacao', '/#contato']) {
     const link = notFound.querySelector(`main a[href="${href}"]`);
     assert.ok(link, `404 missing recovery link ${href}`);
     const target = new URL(href, SITE_URL);
